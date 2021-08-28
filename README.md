@@ -43,7 +43,7 @@
     <li><a href="#features">Features</a></li>
     <li><a href="#upcoming-features">Upcoming features</a></li>
     <li><a href="#installation">Installation</a></li>
-    <li><a href="#example-usage">Examples</a></li>
+    <li><a href="#example-usages">Examples</a></li>
     <li><a href="#api">API</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
