@@ -15,11 +15,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-   <span style='color: #ffddcc;font-size: 99px;font-family: "Aladin";font-style: "normal";font-weight: 500;text-shadow: #ff8a8a 1px 1px 0px, #ff8a8a 2px 2px 0px, #ff8a8a 3px 3px 0px, #ff8a8a 4px 4px 0px, #ff8a8a 5px 5px 0px, #ff8a8a 6px 6px 0px, #ff8a8a 7px 7px 0px, #ff8a8a 8px 8px 0px, #ff8a8a 9px 9px 0px, #ff8a8a 10px 10px 0px;line-height: 1.1;'>Sounity</span>
-  </a>
-
-  <h3 align="center">Sounity</h3>
+  <h2 align="center">Sounity</h2>
 
   <p align="center">
     A nearly dependency-free package for custom positional sounds.
