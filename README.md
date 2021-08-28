@@ -80,6 +80,12 @@ If you have bigger issue with that cracklings than I'm sorry to say that you hav
 
 - Support for youtube links
 - Support for youtube livestreams
+- Extending the API
+  - SetSoundVolume
+  - SetSoundSource
+- Possibility to create and use custom Filter/Effects
+- Configuration File
+  - Change Default Option
 
 ### Installation
 
