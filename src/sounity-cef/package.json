@@ -1,0 +1,15 @@
+{
+  "name": "sounitycef",
+  "version": "0.0.1",
+  "description": "UI Part of Sounity",
+  "main": "",
+  "scripts": {
+    "watch": "parcel watch src/main.js --out-dir ../../dist && cp public/index.html ../../dist/",
+    "build": "parcel build src/main.js --out-dir ../../dist && cp public/index.html ../../dist/"
+  },
+  "author": "Arayni <arayni.max@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
