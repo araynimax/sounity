@@ -39,7 +39,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="#getting-started">Important Note at the start</a></li>
+    <li><a href="#important-note-at-the-start">Important Note at the start</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#upcoming-features">Upcoming features</a></li>
     <li><a href="#installation">Installation</a></li>
