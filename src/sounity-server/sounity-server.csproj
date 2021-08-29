@@ -54,6 +54,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SounitySound.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sounity-shared\sounity-shared.csproj">
+      <Project>{ae99aa46-7bae-4c5b-90fd-bb01715327a4}</Project>
+      <Name>sounity-shared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /I *.dll "..\..\..\..\dist\"</PostBuildEvent>
