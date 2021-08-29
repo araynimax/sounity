@@ -16,11 +16,9 @@ files {
 }
 
 client_scripts {
-	'dist/sounity-client.net.dll',
-	'example/client.lua'
+	'dist/sounity-client.net.dll'
 }
 
 server_scripts {
-	'dist/sounity-server.net.dll',
-	'example/server.lua'
+	'dist/sounity-server.net.dll'
 }
