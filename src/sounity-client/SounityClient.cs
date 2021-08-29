@@ -74,7 +74,7 @@ namespace SounityClient
 
         private void onPlaySound(string identifier, long startTime)
         {
-            if (startTime != null) sounityClientAPI.StartSound(identifier, (long) startTime);
+            if (startTime != null) sounityClientAPI.StartSound(identifier, startTime);
             else sounityClientAPI.StartSound(identifier);
         }
 

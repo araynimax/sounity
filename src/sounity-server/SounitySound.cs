@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace SounityServer
 {
-    class SounitySound
+    class SounitySound: Sounity.ISounitySound
     {
         private string identifier;
         private IDictionary<string, object> options;
@@ -29,7 +29,6 @@ namespace SounityServer
             this.options = options;
 
             NotifyPlayers("CreateSound", identifier, source, getOptionJSON());
-            Debug.WriteLine("create SOUND (method construcor)");
         }
 
         private void NotifyPlayers(string EventName, params object[] args)
@@ -52,12 +51,10 @@ namespace SounityServer
 
             NotifyPlayers("DetachSound");
         }
-        internal void Start()
+        public void Start()
         {
             startTime = API.GetGameTimer();
             isPlaying = true;
-
-            Debug.WriteLine("START SOUND (method start)");
 
             NotifyPlayers("StartSound");
         }
@@ -83,12 +80,12 @@ namespace SounityServer
             NotifyPlayers("RotateSound", rotX, rotY, rotZ);
         }
 
-        internal void Dispose()
+        public void Dispose()
         {
             NotifyPlayers("DisposeSound");
         }
 
-        internal void Stop()
+        public void Stop()
         {
             isPlaying = false;
             NotifyPlayers("DisposeSound");

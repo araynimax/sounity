@@ -9,19 +9,18 @@ using System.Threading.Tasks;
 
 namespace SounityClient
 {
-    class SounitySound
+    class SounitySound: Sounity.ISounitySound
     {
         private string identifier;
         private string source;
         private Dictionary<string, object> options;
         private bool localSound;
 
-        public SounitySound(string identifier, string source, Dictionary<string, object> options, bool localSound)
+        public SounitySound(string identifier, string source, Dictionary<string, object> options)
         {
             this.identifier = identifier;
             this.source = source;
             this.options = options;
-            this.localSound = localSound;
 
             var initialPosition = getPosition();
             float waterHeight = 0;
@@ -129,27 +128,6 @@ namespace SounityClient
                 identifier,
             }));
         }
-
-        public void EnableEffect(string effectName)
-        {
-            API.SendNuiMessage(JsonConvert.SerializeObject(new
-            {
-                type = "enableEffect",
-                identifier,
-                effectName
-            }));
-        }
-
-        public void DisableEffect(string effectName)
-        {
-            API.SendNuiMessage(JsonConvert.SerializeObject(new
-            {
-                type = "disableEffect",
-                identifier,
-                effectName
-            }));
-        }
-
 
         public bool isLocalSound()
         {
