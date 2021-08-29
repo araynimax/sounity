@@ -24,7 +24,7 @@
     <br />
     <br />
     <br />
-    <a href="https://youtube.com">Watch a demonstration</a>
+    <a href="https://www.youtube.com/watch?v=Zru5S0NzmpA">PREVIEW</a>
     ·
     <a href="https://github.com/araynimax/sounity/issues">Report Bug</a>
     ·
