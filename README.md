@@ -84,8 +84,6 @@ If you have bigger issue with that cracklings than I'm sorry to say that you hav
   - SetSoundVolume
   - SetSoundSource
 - Possibility to create and use custom Filter/Effects
-- Configuration File
-  - Change Default Option
 
 ### Installation
 
