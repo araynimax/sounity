@@ -11,7 +11,7 @@ namespace SounityServer
 {
     class SounityServerAPI
     {
-        static int MAX_RANGE = 100;
+        private int MAX_RANGE;
 
         private static int idCounter = 1;
         private Dictionary<string, SounitySound> sounds = new Dictionary<string, SounitySound>();
@@ -27,11 +27,9 @@ namespace SounityServer
             Exports.Add("AttachSound", new Action<string, int>(AttachSound));
             Exports.Add("DetachSound", new Action<string, int>(DetachSound));
 
-            int sounity_stream_max_range = Convert.ToInt32(API.GetResourceMetadata(API.GetCurrentResourceName(), "sounity_stream_max_range", 0));
-
-            if (sounity_stream_max_range != 0)
-                MAX_RANGE = sounity_stream_max_range;
+            MAX_RANGE = Sounity.Config.GetInstance().Get("stream_max_range", 100);
         }
+        
 
         private SounitySound getSoundInstance(string identifier)
         {

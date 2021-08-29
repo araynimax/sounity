@@ -12,7 +12,9 @@ files {
 	'dist/index.html',
 	'dist/main.js',
 	'dist/main.js.map',
-	'dist/Newtonsoft.Json.dll'
+	'dist/Newtonsoft.Json.dll',
+	'dist/sounity-shared.net.dll',
+	'config.ini'
 }
 
 client_scripts {

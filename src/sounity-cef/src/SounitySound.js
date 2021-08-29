@@ -1,6 +1,7 @@
 import TimeDelta from "./helper/TimeDelta";
 import SounitySoundManager from "./SounitySoundManager";
 import { principalAxesToOrientation } from './helper/CalcOrientation';
+import Defaults from './defaults.js';
 
 // not in use @todo 
 export const ESourceType = Object.freeze({
@@ -14,7 +15,6 @@ export const EOutputType = Object.freeze({
     MUSIC: 'music',
 });
 
-
 export default class SounitySound {
     /**
      * 
@@ -24,29 +24,29 @@ export default class SounitySound {
      * @param {SounitySoundManager} soundManager 
      */
     constructor(identifier, source, {
-        volume = 1,        // volume of sound in percent
-        outputType = EOutputType.SFX, // will apply volume level from settings,
-        loop = false,      // music restarts on end
+        volume = Defaults.volume || 187,        // volume of sound in percent
+        outputType = Defaults.outputType || EOutputType.SFX, // will apply volume level from settings,
+        loop = Defaults.loop || false,      // music restarts on end
 
         // sound pos
-        posX = 0,
-        posY = 0,
-        posZ = 0,
+        posX = Defaults.posX || 0,
+        posY = Defaults.posY || 0,
+        posZ = Defaults.posZ || 0,
 
         // sound rotation (orientation)
-        rotX = 0,
-        rotY = 0,
-        rotZ = 0,
+        rotX = Defaults.rotX || 0,
+        rotY = Defaults.rotY || 0,
+        rotZ = Defaults.rotZ || 0,
 
         // other 3d options
-        panningModel = "HRTF",
-        distanceModel = "inverse",
-        maxDistance = 500,
-        refDistance = 3,
-        rolloffFactor = 1,
-        coneInnerAngle = 360,
-        coneOuterAngle = 360,
-        coneOuterGain = 0,
+        panningModel = Defaults.panningModel || "HRTF",
+        distanceModel = Defaults.distanceModel || "inverse",
+        maxDistance = Defaults.maxDistance || 500,
+        refDistance = Defaults.refDistance || 3,
+        rolloffFactor = Defaults.rolloffFactor || 1,
+        coneInnerAngle = Defaults.coneInnerAngle || 360,
+        coneOuterAngle = Defaults.coneOuterAngle || 360,
+        coneOuterGain = Defaults.coneOuterGain || 0,
 
     } = {}, soundManager) {
         this.identifier = identifier;

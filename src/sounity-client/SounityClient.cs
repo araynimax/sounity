@@ -29,7 +29,37 @@ namespace SounityClient
             EventHandlers["__cfx_nui:sounity:ready"] += new Action<IDictionary<string, object>, CallbackDelegate>((data, cb) =>
             {
                 TriggerEvent("Sounity:Ready");
-                cb(new { success = true});
+                cb(new { success = true });
+            });
+
+            API.RegisterNuiCallbackType("sounity:get-defaults");
+            EventHandlers["__cfx_nui:sounity:get-defaults"] += new Action<IDictionary<string, object>, CallbackDelegate>((data, cb) =>
+            {
+                var config = Sounity.Config.GetInstance();
+
+             
+
+                cb(JsonConvert.SerializeObject(new {
+                    volume = config.Get("volume", 1f),
+                    outputType = config.Get("outputType", "sfx"),
+                    loop = config.Get("loop", false),
+
+                    posX = config.Get("posX", 0f),
+                    posY = config.Get("posY", 0f),
+                    posZ = config.Get("posZ", 0f),
+                    rotX = config.Get("rotX", 0f),
+                    rotY = config.Get("rotY", 0f),
+                    rotZ = config.Get("rotZ", 0f),
+
+                    panningModel = config.Get("panningModel", "HRTF"),
+                    distanceModel = config.Get("distanceModel", "inverse"),
+                    maxDistance = config.Get("maxDistance", 500f),
+                    refDistance = config.Get("refDistance", 3f),
+                    rolloffFactor = config.Get("rolloffFactor", 1f),
+                    coneInnerAngle = config.Get("coneInnerAngle", 360f),
+                    coneOuterAngle = config.Get("coneOuterAngle", 0f),
+                    coneOuterGain = config.Get("coneOuterGain", 0f),
+                }));
             });
 
             sounityClientAPI = new SounityClientAPI(Exports);
