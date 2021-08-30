@@ -25,6 +25,8 @@ namespace Sounity
             Exports.Add("DisposeSound", new Action<string>(DisposeSound));
             Exports.Add("AttachSound", new Action<string, int>(AttachSound));
             Exports.Add("DetachSound", new Action<string>(DetachSound));
+            Exports.Add("AddSoundFilter", new Action<string, string>(AddSoundFilter));
+            Exports.Add("RemoveSoundFilter", new Action<string, string>(RemoveSoundFilter));
 
             this.identifierPrefix = identifierPrefix;
         }
@@ -92,6 +94,16 @@ namespace Sounity
         public void DetachSound(string identifier)
         {
             getSoundInstance(identifier).Detach();
+        }
+        
+        public void AddSoundFilter(string identifier, string filterName)
+        {
+            getSoundInstance(identifier).AddFilter(filterName);
+        }
+
+        public void RemoveSoundFilter(string identifier, string filterName)
+        {
+            getSoundInstance(identifier).RemoveFilter(filterName);
         }
     }
 }
