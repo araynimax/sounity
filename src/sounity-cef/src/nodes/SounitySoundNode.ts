@@ -15,8 +15,6 @@ export enum ESounitySourceNodeState {
 export default class SounitySourceNode extends SounityBaseNode {
   private state: ESounitySourceNodeState = ESounitySourceNodeState.SETUP;
   private options: ISourceNodeOptions;
-  private sounityController: SountiyController;
-  private audioCtx: AudioContext;
   private identifier: string;
   private url: string;
   private outputType: 'sfx' | 'music';
@@ -43,7 +41,7 @@ export default class SounitySourceNode extends SounityBaseNode {
     options: ISourceNodeOptions,
     sounityController: SountiyController
   ) {
-    super();
+    super(sounityController);
 
     this.identifier = identifier;
     this.url = url;
@@ -195,7 +193,13 @@ export default class SounitySourceNode extends SounityBaseNode {
   }
 
   private getVolume() {
-    return 1;
+    if (this.outputType === 'music') {
+      return this.volume * this.sounityController.getMusicVolume();
+    } else if (this.outputType === 'sfx') {
+      return this.volume * this.sounityController.getSfxVolume();
+    }
+
+    return this.volume;
   }
 
   public tick(endTime: number) {

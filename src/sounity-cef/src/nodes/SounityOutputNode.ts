@@ -2,14 +2,10 @@ import SounityBaseNode from './SounityBaseNode';
 import SountiyController from '../SounityController';
 
 export default class SounityOutputNode extends SounityBaseNode {
-  private audioCtx: AudioContext;
-
   private masterVolumeGainNode: GainNode;
 
   public constructor(controller: SountiyController) {
-    super();
-
-    this.audioCtx = controller.getAudioCtx();
+    super(controller);
 
     this.masterVolumeGainNode = this.audioCtx.createGain();
 
