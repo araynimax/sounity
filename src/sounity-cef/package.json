@@ -4,12 +4,16 @@
   "description": "UI Part of Sounity",
   "main": "",
   "scripts": {
-    "watch": "parcel watch src/main.js --out-dir ../../dist && cp public/index.html ../../dist/",
-    "build": "parcel build src/main.js --out-dir ../../dist && cp public/index.html ../../dist/"
+    "watch": "parcel watch src/main.ts --no-hmr --out-dir ../../dist && cp public/index.html ../../dist/",
+    "build": "parcel build src/main.ts --out-dir ../../dist && cp public/index.html ../../dist/"
   },
   "author": "Arayni <arayni.max@gmail.com>",
   "license": "UNLICENSED",
   "devDependencies": {
-    "parcel-bundler": "^1.12.5"
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "events": "^3.3.0"
   }
 }
