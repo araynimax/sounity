@@ -1,5 +1,6 @@
 import SountiyController, { FilterType } from './SounityController';
 
+window.addEventListener('click', () => {});
 const sounityController = new SountiyController();
 
 // for debugging
