@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +15,9 @@ namespace SounityClient
 
         public SounityClientAPI(ExportDictionary Exports) : base(Exports, "client")
         {
-
+            Exports.Add("CreateFilter", new Action<string, string, string>(CreateFilter));
+            Exports.Add("AddListenerFilter", new Action<string>(AddListenerFilter));
+            Exports.Add("RemoveListenerFilter", new Action<string>(RemoveListenerFilter));
         }
 
         public void setServerTime(long serverTime)
@@ -74,6 +76,34 @@ namespace SounityClient
                 sound.Move(position);
                 sound.Rotate(rotation);
             }
+        }
+        public void CreateFilter(string filterName, string filterType, string options_json)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "createFilter",
+                filterName,
+                filterType,
+                options = JsonConvert.DeserializeObject(options_json)
+            }));
+        }
+
+        public void AddListenerFilter(string filterName)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "addListenerFilter",
+                filterName,
+            }));
+        }
+
+        public void RemoveListenerFilter(string filterName)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "removeListenerFilter",
+                filterName,
+            }));
         }
     }
 }

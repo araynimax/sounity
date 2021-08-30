@@ -1,4 +1,4 @@
-﻿using CitizenFX.Core;
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
 using System;
@@ -164,6 +164,26 @@ namespace SounityClient
                 posZ = Convert.ToSingle(options["posZ"]);
 
             return new Vector3(posX, posY, posZ);
+        }
+
+        public void AddFilter(string filterName)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "addSoundFilter",
+                identifier,
+                filterName
+            }));
+        }
+
+        public void RemoveFilter(string filterName)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "removeSoundFilter",
+                identifier,
+                filterName
+            }));
         }
     }
 }

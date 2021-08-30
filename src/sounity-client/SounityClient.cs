@@ -1,4 +1,4 @@
-﻿using CitizenFX.Core;
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
 using System;
@@ -23,6 +23,11 @@ namespace SounityClient
             EventHandlers[$"{EVENT_PREFIX}:AttachSound"] += new Action<string, int>(onAttachSound);
             EventHandlers[$"{EVENT_PREFIX}:DetachSound"] += new Action<string>(onDetachSound);
             EventHandlers[$"{EVENT_PREFIX}:DisposeSound"] += new Action<string>(onDisposeSound);
+            EventHandlers[$"{EVENT_PREFIX}:AddFilter"] += new Action<string, string>(onAddFilter);
+            EventHandlers[$"{EVENT_PREFIX}:AddFilters"] += new Action<string, string>(onAddFilters);
+            EventHandlers[$"{EVENT_PREFIX}:RemoveFilter"] += new Action<string, string>(onRemoveFilter);
+            EventHandlers[$"{EVENT_PREFIX}:AddListenerFilter"] += new Action<string>(onAddListenerFilter);
+            EventHandlers[$"{EVENT_PREFIX}:RemoveListenerFilter"] += new Action<string>(onRemoveListenerFilter);
 
 
             API.RegisterNuiCallbackType("sounity:ready");
@@ -112,6 +117,32 @@ namespace SounityClient
         private void onServerTime(long serverTime)
         {
             sounityClientAPI.setServerTime(serverTime);
+        }
+
+        private void onAddFilter(string identifier, string filterName)
+        {
+            sounityClientAPI.AddSoundFilter(identifier, filterName);
+        }
+
+        private void onAddFilters(string identifier, string filterNames_json)
+        {
+            List<string> filterNames = JsonConvert.DeserializeObject<List<string>>(filterNames_json);
+
+            foreach(var filterName in filterNames)
+                onAddFilter(identifier, filterName);
+        }
+
+        private void onRemoveFilter(string identifier, string filterName)
+        {
+            sounityClientAPI.RemoveSoundFilter(identifier, filterName);
+        } 
+        private void onAddListenerFilter(string filterName)
+        {
+            sounityClientAPI.AddListenerFilter(filterName);
+        }  
+        private void onRemoveListenerFilter(string filterName)
+        {
+            sounityClientAPI.RemoveListenerFilter(filterName);
         }
 
         private async Task BrowserUpdaterTick()
