@@ -73,6 +73,7 @@ If you have bigger issue with that cracklings than I'm sorry to say that you hav
 - Positional sound
 - Positional sound attached to an entity.
 - Server-side created sounds are time-synced on every client
+- create and use custom Filter/Effects
 - Underwater effect
   - If the sound source and/or the listener are underwater the sound gets muffled
 
@@ -83,7 +84,6 @@ If you have bigger issue with that cracklings than I'm sorry to say that you hav
 - Extending the API
   - SetSoundVolume
   - SetSoundSource
-- Possibility to create and use custom Filter/Effects
 
 ### Installation
 
