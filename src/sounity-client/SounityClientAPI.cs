@@ -12,10 +12,13 @@ namespace SounityClient
     class SounityClientAPI: Sounity.BaseSounityAPI<SounitySound>
     {
         private long serverTime = API.GetGameTimer();
+        private bool underwater = false;
 
         public SounityClientAPI(ExportDictionary Exports) : base(Exports, "client")
         {
-
+            Exports.Add("CreateFilter", new Action<string, string, string>(CreateFilter));
+            Exports.Add("AddListenerFilter", new Action<string>(AddListenerFilter));
+            Exports.Add("RemoveListenerFilter", new Action<string>(RemoveListenerFilter));
         }
 
         public void setServerTime(long serverTime)
@@ -41,6 +44,16 @@ namespace SounityClient
             float waterHeight = 0;
             API.GetWaterHeightNoWaves(Position.X, Position.Y, Position.Z, ref waterHeight);
 
+            if(Position.Z < waterHeight && underwater == false)
+            {
+                AddListenerFilter("underwater");
+                underwater = true;
+            } else if (Position.Z >= waterHeight && underwater == true)
+            {
+                RemoveListenerFilter("underwater");
+                underwater = false;
+            }
+
             API.SendNuiMessage(JsonConvert.SerializeObject(new
             {
                 type = "update",
@@ -50,7 +63,6 @@ namespace SounityClient
                 rotX = Rotation.X,
                 rotY = Rotation.Y,
                 rotZ = Rotation.Z,
-                underwater = Position.Z < waterHeight,
                 musicVolume,
                 sfxVolume,
             }));
@@ -74,6 +86,34 @@ namespace SounityClient
                 sound.Move(position);
                 sound.Rotate(rotation);
             }
+        }
+        public void CreateFilter(string filterName, string filterType, string options_json)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "createFilter",
+                filterName,
+                filterType,
+                options = JsonConvert.DeserializeObject(options_json)
+            }));
+        }
+
+        public void AddListenerFilter(string filterName)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "addListenerFilter",
+                filterName,
+            }));
+        }
+
+        public void RemoveListenerFilter(string filterName)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new
+            {
+                type = "removeListenerFilter",
+                filterName,
+            }));
         }
     }
 }

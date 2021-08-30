@@ -17,8 +17,20 @@ namespace SounityServer
         public SounityServerAPI(ExportDictionary Exports): base(Exports, "server")
         {
             MAX_RANGE = Config.GetInstance().Get("stream_max_range", 100);
+            Exports.Add("AddListenerFilter", new Action<int, string>(AddListenerFilter));
+            Exports.Add("RemoveListenerFilter", new Action<int, string>(RemoveListenerFilter));
         }
-       
+
+        public void AddListenerFilter(int playerId, string filterName)
+        {
+            (new PlayerList())[playerId].TriggerEvent("Sounity:AddListenerFilter", filterName);
+        }
+
+        public void RemoveListenerFilter(int playerId, string filterName)
+        {
+            (new PlayerList())[playerId].TriggerEvent("Sounity:RemoveListenerFilter", filterName);
+        }
+
         public void Tick()
         {
 

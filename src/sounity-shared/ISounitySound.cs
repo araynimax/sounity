@@ -21,5 +21,9 @@ namespace Sounity
         void Attach(int entityId);
 
         void Detach();
+
+        void AddFilter(string filterName);
+
+        void RemoveFilter(string filterName);
     }
 }

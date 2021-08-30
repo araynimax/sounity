@@ -1,9 +1,8 @@
-import SountiyController from './SounityController';
-
-//@ts-ignore
+import SountiyController, { FilterType } from './SounityController';
 
 const sounityController = new SountiyController();
 
+// for debugging
 //@ts-ignore
 window.sounityController = sounityController;
 
@@ -37,10 +36,31 @@ const handlers = {
   disposeSound(data) {
     sounityController.disposeSound(data.identifier);
   },
+
+  addSoundFilter(data) {
+    sounityController.addSoundFilter(data.identifier, data.filterName);
+  },
+
+  removeSoundFilter(data) {
+    sounityController.removeSoundFilter(data.identifier, data.filterName);
+  },
+
+  addListenerFilter(data) {
+    sounityController.addListenerFilter(data.filterName);
+  },
+
+  removeListenerFilter(data) {
+    sounityController.removeListenerFilter(data.filterName);
+  },
+
+  createFilter(data) {
+    sounityController.createFilter(data.filterName, data.filterType, data.options);
+  },
 };
 
 window.addEventListener('message', (event) => {
   if (event.data.type in handlers) handlers[event.data.type](event.data);
 });
 
+// @ts-ignore
 fetch(`https://${GetParentResourceName()}/sounity:ready`);

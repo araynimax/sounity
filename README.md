@@ -131,8 +131,8 @@ exports.sounity:StartSound(soundId);
 
 ## API
 
-The API is identical on server and client.<br/>
-The only difference is, that on client side there is no sync to other players.<br/>
+The API is **nearly** identical on server and client.<br/>
+The biggest difference is, that on client side there is no sync to other players.<br/>
 For the most cases I recommend a server side usage.
 
 ### Methods
@@ -194,6 +194,53 @@ Detachs a sound from an entity
 #### `DisposeSound(identifier: string)`
 
 Destroys a sound
+
+#### **[CLIENT ONLY]** `CreateFilter(filterName: string, filterType: 'biquad' | 'convolver', options: json_string)`
+
+Create a filter with a unique name.
+
+You can choose between a biquad filter or a convolver filter.
+
+##### filterType: 'biquad'
+
+Biquad is a low-order filter.
+The options are identical to the [official documentation](https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode)
+
+##### filterType: 'convolver'
+
+A more complex filter type is the convolver. This filter is often used to get a reverb-effect.
+You need a impulse-response file.
+
+[official documentation](https://developer.mozilla.org/en-US/docs/Web/API/ConvolverNode)
+
+[free reverb impulse responses](https://www.voxengo.com/impulses/)
+
+###### options
+
+- url: string
+  - url to impulse response
+- disableNormalization: bool
+  - A boolean value controlling whether the impulse response from the buffer will be scaled by an equal-power normalization, or not. The default is 'false'.
+
+#### `AddSoundFilter(identifier: string, filterName: string)`
+
+Add a filter to a sound
+
+#### `RemoveSoundFilter(identifier: string, filterName: string)`
+
+Remove a filter from a sound
+
+#### **[SERVER]** `AddListenerFilter(playerId: int, filterName: string)`
+
+#### **[CLIENT]** `AddListenerFilter(filterName: string)`
+
+Add filter to listener. (Global Filter on client)
+
+#### **[SERVER]** `AddListenerFilter(playerId: int, filterName: string)`
+
+#### **[CLIENT]** `RemoveListenerFilter(filterName: string)`
+
+Remove filter from listener.
 
 <!-- CONTRIBUTING -->
 

@@ -5,9 +5,11 @@ import SounityOutputNode from './nodes/SounityOutputNode';
 import SounitySoundNode, { ESounitySourceNodeState } from './nodes/SounitySoundNode';
 
 //window.addEventListener('message', (event) => event.data.type in events && events[event.data.type](event.data));
+export type FilterType = 'biquad' | 'convolver';
 
 export default class SountiyController {
   private soundNodes: Record<string, SounitySoundNode> = {};
+  private availableFilters: Record<string, { type: FilterType; options: any }> = {};
   private audioCtx: AudioContext;
   private clock: Clock = new Clock();
 
@@ -136,5 +138,45 @@ export default class SountiyController {
 
     // tick output node
     this.outputNode.tick(endTime);
+  }
+
+  public createFilter(identifier: string, type: 'biquad', options: BiquadFilterOptions);
+  public createFilter(identifier: string, type: 'convolver', options: { url: string; disableNormalization: boolean });
+  public createFilter(identifier: string, type: FilterType, options: any) {
+    if (identifier in this.availableFilters)
+      throw new Error(`There already exists a filter with given identifier '${identifier}'`);
+
+    this.availableFilters[identifier] = { type, options };
+  }
+
+  // internal function
+  public getFilterOptions(identifier: string) {
+    if (identifier in this.availableFilters) return this.availableFilters[identifier];
+
+    throw new Error(`There does not exists a filter with given identifier '${identifier}'`);
+  }
+
+  public addSoundFilter(identifier: string, filterName: string) {
+    this.getSoundNode(identifier).addFilter(filterName);
+  }
+
+  public removeSoundFilter(identifier: string, filterName: string) {
+    this.getSoundNode(identifier).removeFilter(filterName);
+  }
+
+  public addListenerFilter(filterName: string) {
+    this.outputNode.addFilter(filterName);
+  }
+
+  public removeListenerFilter(filterName: string) {
+    this.outputNode.removeFilter(filterName);
+  }
+
+  public getMusicVolume() {
+    return this.musicVolume / 10;
+  }
+
+  public getSfxVolume() {
+    return this.sfxVolume / 10;
   }
 }
