@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ namespace SounityClient
     class SounityClientAPI: Sounity.BaseSounityAPI<SounitySound>
     {
         private long serverTime = API.GetGameTimer();
+        private bool underwater = false;
 
         public SounityClientAPI(ExportDictionary Exports) : base(Exports, "client")
         {
@@ -43,6 +44,16 @@ namespace SounityClient
             float waterHeight = 0;
             API.GetWaterHeightNoWaves(Position.X, Position.Y, Position.Z, ref waterHeight);
 
+            if(Position.Z < waterHeight && underwater == false)
+            {
+                AddListenerFilter("underwater");
+                underwater = true;
+            } else if (Position.Z >= waterHeight && underwater == true)
+            {
+                RemoveListenerFilter("underwater");
+                underwater = false;
+            }
+
             API.SendNuiMessage(JsonConvert.SerializeObject(new
             {
                 type = "update",
@@ -52,7 +63,6 @@ namespace SounityClient
                 rotX = Rotation.X,
                 rotY = Rotation.Y,
                 rotZ = Rotation.Z,
-                underwater = Position.Z < waterHeight,
                 musicVolume,
                 sfxVolume,
             }));

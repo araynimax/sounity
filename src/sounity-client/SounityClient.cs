@@ -1,4 +1,4 @@
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
 using System;
@@ -34,6 +34,11 @@ namespace SounityClient
             EventHandlers["__cfx_nui:sounity:ready"] += new Action<IDictionary<string, object>, CallbackDelegate>((data, cb) =>
             {
                 TriggerEvent("Sounity:Ready");
+                sounityClientAPI.CreateFilter("underwater", "biquad", JsonConvert.SerializeObject(new {
+                    Q = 1,
+                    frequency = 100,
+                    type = "lowpass"
+                }));
                 cb(new { success = true });
             });
 

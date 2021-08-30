@@ -1,4 +1,4 @@
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +14,7 @@ namespace SounityClient
         private string identifier;
         private string source;
         private Dictionary<string, object> options;
-        private bool localSound;
+        private bool underwater = false;
 
         public SounitySound(string identifier, string source, Dictionary<string, object> options)
         {
@@ -32,8 +32,13 @@ namespace SounityClient
                 identifier,
                 source,
                 options,
-                underwater = initialPosition.Z < waterHeight,
             }));
+
+            if(initialPosition.Z < waterHeight)
+            {
+                AddFilter("underwater");
+                underwater = true;
+            }
         }
 
         public void Start()
@@ -76,8 +81,17 @@ namespace SounityClient
                 posX,
                 posY,
                 posZ,
-                underwater = posZ < waterHeight,
             }));
+
+            if (posZ < waterHeight && underwater == false)
+            {
+                AddFilter("underwater");
+                underwater = true;
+            } else if (posZ >= waterHeight && underwater == true)
+            {
+                RemoveFilter("underwater");
+                underwater = false;
+            }
         }
 
         public void Rotate(Vector3 rot)
@@ -127,11 +141,6 @@ namespace SounityClient
                 type = "disposeSound",
                 identifier,
             }));
-        }
-
-        public bool isLocalSound()
-        {
-            return localSound;
         }
 
         public bool isAttached()
