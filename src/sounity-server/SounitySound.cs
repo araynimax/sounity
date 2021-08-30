@@ -17,6 +17,7 @@ namespace SounityServer
         private long startTime = 0;
         private string source = "";
         public List<Player> playersInRange = new List<Player>();
+        private List<string> activeFilters = new List<string>();
 
         public SounitySound(string identifier, string source, Dictionary<string, object> options = null)
         {
@@ -102,6 +103,11 @@ namespace SounityServer
 
             player.TriggerEvent("Sounity:CreateSound", identifier, source, getOptionJSON());
 
+            if(activeFilters.Count > 0)
+            {
+                player.TriggerEvent("Sounity:AddFilters", identifier, JsonConvert.SerializeObject(activeFilters));
+            }
+
             if (isPlaying)
             {
                 player.TriggerEvent("Sounity:StartSound", identifier, startTime);
@@ -152,5 +158,25 @@ namespace SounityServer
         {
             return identifier;
         }
+
+        public void AddFilter(string filterName)
+        {
+            if(activeFilters.Contains(filterName))
+                throw new Exception($"A filter with the name '{filterName}' is already active in this sound instance!");
+
+            activeFilters.Add(filterName);
+            NotifyPlayers("AddFilter", filterName);
+        }
+
+        public void RemoveFilter(string filterName)
+        {
+            if (!activeFilters.Contains(filterName))
+                throw new Exception($"A filter with the name '{filterName}' is not active in this sound instance!");
+
+            activeFilters.Remove(filterName);
+            NotifyPlayers("RemoveFilter", filterName);
+        }
+
+
     }
 }
