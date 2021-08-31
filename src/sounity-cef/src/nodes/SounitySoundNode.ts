@@ -12,8 +12,16 @@ export enum ESounitySourceNodeState {
   ERROR,
 }
 
+export enum ESourceType {
+  audio,
+  video,
+  youtube,
+}
+
 export default class SounitySourceNode extends SounityBaseNode {
   private state: ESounitySourceNodeState = ESounitySourceNodeState.SETUP;
+  private sourceType: ESourceType = null;
+
   private options: ISourceNodeOptions;
   private identifier: string;
   private url: string;
@@ -30,6 +38,8 @@ export default class SounitySourceNode extends SounityBaseNode {
   private rotY: number;
   private rotZ: number;
 
+  private youtubeId: string;
+  private embeddedElement: HTMLElement;
   private mediaElement: HTMLMediaElement;
   private mediaElementAudioSource: MediaElementAudioSourceNode;
   private volumeGainNode: GainNode;
@@ -69,28 +79,94 @@ export default class SounitySourceNode extends SounityBaseNode {
     this.setup();
   }
 
+  private processUrl(): Promise<ESourceType> {
+    return new Promise((res, rej) => {
+      let match = this.url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/);
+      if (match && match[2].length == 11) {
+        this.youtubeId = match[2];
+        return res(ESourceType.youtube);
+      }
+
+      const xhttp = new XMLHttpRequest();
+      xhttp.addEventListener('error', rej);
+      xhttp.addEventListener('readystatechange', () => {
+        if (xhttp.readyState !== xhttp.DONE) return;
+
+        let type = xhttp.getResponseHeader('Content-Type').trim();
+
+        if (type.includes(';')) type = type.split(';')[0].trim();
+
+        if (type.startsWith('audio')) return ESourceType.audio;
+        if (type.startsWith('video')) return ESourceType.video;
+      });
+      xhttp.open('GET', this.url);
+      xhttp.setRequestHeader('Range', 'bytes=0');
+      xhttp.send();
+    });
+  }
+
+  private setupYoutube(): Promise<void> {
+    return new Promise((res, rej) => {
+      const iframe = document.createElement('iframe');
+      document.body.appendChild(iframe);
+      iframe.addEventListener('error', rej);
+      iframe.addEventListener('load', () => {
+        const playerElement = iframe.contentWindow.document.querySelector('#player > div');
+        playerElement.addEventListener('onError', rej);
+        const onStateChange = () => {
+          if (playerElement.getPlayerState() === 1) {
+            this.mediaElement.pause();
+          } else if (playerElement.getPlayerState() === 2) {
+            this.duration = this.mediaElement.duration;
+            this.mediaElement.currentTime = 0;
+            this.volume = 1;
+            playerElement.removeEventListener('onStateChange', onStateChange);
+            res();
+          }
+        };
+        playerElement.addEventListener('onStateChange', onStateChange);
+
+        this.mediaElement = iframe.contentWindow.document.querySelector('video');
+        this.mediaElement.volume = 0;
+        //@ts-ignore
+        playerElement.playVideo();
+      });
+      iframe.src = `https://www.youtube.com/embed/${this.youtubeId}?autoplay=0&html5=1`;
+
+      this.embeddedElement = iframe;
+    });
+  }
+
   private async setup() {
     const promiseStack: Promise<void>[] = [];
 
-    this.mediaElement = new Audio(this.url);
-    this.mediaElement.crossOrigin = 'anonymous';
-    this.mediaElement.preload = 'metadata';
-    this.mediaElement.loop = DefaultOptions.Get('loop', this.options.loop, false);
+    this.sourceType = await this.processUrl();
 
-    promiseStack.push(
-      new Promise((res, rej) => {
-        this.mediaElement.addEventListener('error', rej, { once: true });
+    if (this.sourceType === ESourceType.youtube) {
+      await this.setupYoutube();
+    } else if (this.sourceType === ESourceType.audio || this.sourceType === ESourceType.video) {
+      this.mediaElement = new Audio(this.url);
+      this.mediaElement.crossOrigin = 'anonymous';
+      this.mediaElement.preload = 'metadata';
+      this.mediaElement.loop = DefaultOptions.Get('loop', this.options.loop, false);
+    }
 
-        this.mediaElement.addEventListener(
-          'durationchange',
-          () => {
-            this.duration = this.mediaElement.duration;
-            res();
-          },
-          { once: true }
-        );
-      })
-    );
+    if (this.duration === NaN) {
+      promiseStack.push(
+        new Promise((res, rej) => {
+          this.mediaElement.addEventListener('error', rej, { once: true });
+
+          this.mediaElement.addEventListener(
+            'durationchange',
+            () => {
+              this.duration = this.mediaElement.duration;
+              res();
+            },
+            { once: true }
+          );
+        })
+      );
+    }
 
     this.mediaElementAudioSource = this.audioCtx.createMediaElementSource(this.mediaElement);
 
