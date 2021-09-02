@@ -3,6 +3,7 @@ import * as DefaultOptions from '../helper/DefaultOptions';
 import ISourceNodeOptions from './ISourceNodeOptions';
 import SounityBaseNode from './SounityBaseNode';
 import SountiyController from '../SounityController';
+import SoundLoader from '../helper/SoundLoader';
 
 export enum ESounitySourceNodeState {
   SETUP,
@@ -30,8 +31,8 @@ export default class SounitySourceNode extends SounityBaseNode {
   private rotY: number;
   private rotZ: number;
 
-  private mediaElement: HTMLMediaElement;
-  private mediaElementAudioSource: MediaElementAudioSourceNode;
+  private audioBuffer: AudioBuffer;
+  private audioBufferSourceNode: AudioBufferSourceNode;
   private volumeGainNode: GainNode;
   private pannerNode: PannerNode;
 
@@ -72,27 +73,12 @@ export default class SounitySourceNode extends SounityBaseNode {
   private async setup() {
     const promiseStack: Promise<void>[] = [];
 
-    this.mediaElement = new Audio(this.url);
-    this.mediaElement.crossOrigin = 'anonymous';
-    this.mediaElement.preload = 'metadata';
-    this.mediaElement.loop = DefaultOptions.Get('loop', this.options.loop, false);
+    this.audioBuffer = await this.audioCtx.decodeAudioData(await SoundLoader.getInstance().loadUrl(this.url));
 
-    promiseStack.push(
-      new Promise((res, rej) => {
-        this.mediaElement.addEventListener('error', rej, { once: true });
-
-        this.mediaElement.addEventListener(
-          'durationchange',
-          () => {
-            this.duration = this.mediaElement.duration;
-            res();
-          },
-          { once: true }
-        );
-      })
-    );
-
-    this.mediaElementAudioSource = this.audioCtx.createMediaElementSource(this.mediaElement);
+    this.audioBufferSourceNode = this.audioCtx.createBufferSource();
+    this.audioBufferSourceNode.loop = DefaultOptions.Get('loop', this.options.loop, false);
+    this.audioBufferSourceNode.buffer = this.audioBuffer;
+    this.duration = this.audioBuffer.duration;
 
     this.volumeGainNode = this.audioCtx.createGain();
     this.volumeGainNode.gain.value = this.getVolume();
@@ -115,7 +101,7 @@ export default class SounitySourceNode extends SounityBaseNode {
     this.pannerNode.orientationY.value = this.rotY;
     this.pannerNode.orientationZ.value = this.rotZ;
 
-    this.mediaElementAudioSource.connect(this.volumeGainNode);
+    this.audioBufferSourceNode.connect(this.volumeGainNode);
     this.volumeGainNode.connect(this.pannerNode);
     this.setOutputNode(this.pannerNode);
 
@@ -145,18 +131,20 @@ export default class SounitySourceNode extends SounityBaseNode {
       return this.once('ready', () => this.start(startTime));
     }
 
+    let offset = 0;
+
     if (startTime !== undefined && this.duration !== Infinity) {
       const startTimeInSec = startTime / 1000;
       if (startTimeInSec >= this.duration && this.loop === true) {
-        this.setCurrentTime(startTimeInSec % this.duration);
+        offset = startTimeInSec % this.duration;
       } else if (startTimeInSec < this.duration) {
-        this.setCurrentTime(startTimeInSec);
+        offset = startTimeInSec;
       } else {
         return; // dont start! the audio is already finished
       }
     }
 
-    this.mediaElement.play();
+    this.audioBufferSourceNode.start(0, offset);
   }
 
   public move(x: number, y: number, z: number): void {
@@ -180,12 +168,7 @@ export default class SounitySourceNode extends SounityBaseNode {
       return this.once('ready', () => this.stop());
     }
 
-    this.mediaElement.pause();
-    this.mediaElement.currentTime = 0;
-  }
-
-  setCurrentTime(newTime: number) {
-    this.mediaElement.currentTime = newTime;
+    this.audioBufferSourceNode.stop(0);
   }
 
   dispose() {

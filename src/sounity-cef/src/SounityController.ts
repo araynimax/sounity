@@ -99,7 +99,7 @@ export default class SountiyController {
   }
 
   public setCurrentTime(identifier: string, newTime: number): void {
-    this.getSoundNode(identifier).setCurrentTime(newTime);
+    // this.getSoundNode(identifier).setCurrentTime(newTime);
   }
 
   public moveSound(identifier: string, x: number, y: number, z: number): void {
