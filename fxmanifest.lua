@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Arayni <arayni.max@gmail.com>'
 description 'A library that helps u playing positional sound'
-version '0.0.1'
+version '2.0.0'
 
 sounity_stream_max_range "100" -- if synced sound is x units away of a player it will get destroyed in that players session
 
