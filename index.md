@@ -79,11 +79,8 @@ If you have bigger issue with that cracklings than I'm sorry to say that you hav
 
 ### Upcoming Features
 
-- Support for youtube links
-- Support for youtube livestreams
-- Extending the API
-  - SetSoundVolume
-  - SetSoundSource
+You have an idea?
+Submit it [here](https://github.com/araynimax/sounity/issues).
 
 ### Installation
 
