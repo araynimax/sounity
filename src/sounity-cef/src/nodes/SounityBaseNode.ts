@@ -31,7 +31,7 @@ export default abstract class SounityBaseNode {
 
   protected setOutputNode(node: AudioNode) {
     if (this.destination) {
-      this.outputNode.disconnect(this.destination);
+      this.outputNode && this.outputNode.disconnect(this.destination);
       node.connect(this.destination);
     }
 
