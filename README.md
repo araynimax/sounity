@@ -100,7 +100,7 @@ For a detailed list of all methods scroll down to [#API](#api)
 
 ```lua
 -- create a sound instance
-local soundId = exports.sounity:CreateSound("URL TO MP3", json.encode({
+local soundId = exports.sounity:CreateSound("URL TO MP3 nui:// supported!", json.encode({
     posX = 3,
     posY = 5,
     posZ = 8,
@@ -114,7 +114,7 @@ exports.sounity:StartSound(soundId);
 
 ```lua
 -- create a sound instance
-local soundId = exports.sounity:CreateSound("URL TO MP3");
+local soundId = exports.sounity:CreateSound("URL TO MP3 nui:// supported!");
 
 -- attach it to the player ped
 local ped = GetPlayerPed(source);
