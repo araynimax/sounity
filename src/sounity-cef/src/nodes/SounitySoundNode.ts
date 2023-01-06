@@ -88,7 +88,7 @@ export default class SounitySourceNode extends SounityBaseNode {
     this.pannerNode.distanceModel = DefaultOptions.Get('distanceModel', this.options.distanceModel, 'inverse');
     this.pannerNode.maxDistance = DefaultOptions.Get('maxDistance', this.options.maxDistance, 500);
     this.pannerNode.refDistance = DefaultOptions.Get('refDistance', this.options.refDistance, 3);
-    this.pannerNode.rolloffFactor = DefaultOptions.Get('rolloffFactor', this.options.refDistance, 1);
+    this.pannerNode.rolloffFactor = DefaultOptions.Get('rolloffFactor', this.options.rolloffFactor, 1);
     this.pannerNode.coneInnerAngle = DefaultOptions.Get('coneInnerAngle', this.options.coneInnerAngle, 360);
     this.pannerNode.coneOuterAngle = DefaultOptions.Get('coneOuterAngle', this.options.coneOuterAngle, 0);
     this.pannerNode.coneOuterGain = DefaultOptions.Get('coneOuterGain', this.options.coneOuterGain, 0);
