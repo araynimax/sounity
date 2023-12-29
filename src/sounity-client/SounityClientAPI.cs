@@ -44,16 +44,18 @@ namespace SounityClient
             float waterHeight = 0;
             API.GetWaterHeightNoWaves(Position.X, Position.Y, Position.Z, ref waterHeight);
 
-            if(Position.Z < waterHeight && underwater == false)
+            bool isPlayerDiving = API.IsPedSwimmingUnderWater(API.PlayerPedId());
+
+            if (isPlayerDiving && underwater == false)
             {
                 AddListenerFilter("underwater");
                 underwater = true;
-            } else if (Position.Z >= waterHeight && underwater == true)
+            } else if (!isPlayerDiving && underwater == true)
             {
                 RemoveListenerFilter("underwater");
                 underwater = false;
             }
-
+            
             API.SendNuiMessage(JsonConvert.SerializeObject(new
             {
                 type = "update",
