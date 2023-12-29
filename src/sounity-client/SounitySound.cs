@@ -83,11 +83,13 @@ namespace SounityClient
                 posZ,
             }));
 
-            if (posZ < waterHeight && underwater == false)
+            bool isPlayerDiving = API.IsPedSwimmingUnderWater(API.PlayerPedId());
+
+            if (isPlayerDiving && underwater == false)
             {
                 AddFilter("underwater");
                 underwater = true;
-            } else if (posZ >= waterHeight && underwater == true)
+            } else if (isPlayerDiving && underwater == true)
             {
                 RemoveFilter("underwater");
                 underwater = false;
